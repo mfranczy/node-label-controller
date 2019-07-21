@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-label-controller
+  labels:
+    app: node-label-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-label-controller
+  template:
+    metadata:
+      labels:
+        app: node-label-controller
+    spec:
+      containers:
+      - name: node-label-controller
+        image: mfranczy/node-label-controller:latest
+        imagePullPolicy: Always
+      serviceAccountName: node-label-controller

@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: container-linux-update-operator
+  namespace: default
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: container-linux-update-operator
+    spec:
+      nodeSelector:
+        kubermatic.io/uses-container-linux: "true"
+      containers:
+      - name: update-operator
+        image: quay.io/coreos/container-linux-update-operator:v0.7.0
+        command:
+        - "/bin/update-operator"
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
